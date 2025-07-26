@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shipping JSON Generator</title>
+  <style>
+    body { font-family: sans-serif; margin: 30px; }
+    label { display: block; margin-top: 15px; }
+    select, input, button { padding: 5px; width: 300px; margin-top: 5px; }
+    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; word-wrap: break-word; }
+    #copyBtn { width: auto; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Shipping JSON Generator</h2>
+  <label>Delivery Date:
+    <input type="date" id="deliveryDate" min="" />
+  </label>
+  <label>Dispatch Date:
+    <input type="date" id="dispatchDate" min="" />
+  </label>
+  <label>Carrier Code:
+    <select id="carrierCode">
+      <option value="">-- Select --</option>
+      <option value="shq-fedex-soon">Fedex</option>
+	  <option value="shq-cdl-weekdays">CDL</option>
+    </select>
+  </label>
+  <label>Method Code:
+    <select id="methodCode">
+      <option value="">-- Select --</option>
+      <option value="GROUND_HOME_DELIVERY">GROUND_HOME_DELIVERY</option>
+      <option value="FEDEX_2_DAY">FEDEX_2_DAY</option>
+      <option value="STANDARD_OVERNIGHT">STANDARD_OVERNIGHT</option>
+	  <option value="CDL_standard">CDL Standard</option>
+    </select>
+  </label>
+  <button onclick="generateJSON()">Generate JSON</button>
+  <h3>Resulting JSON:</h3>
+  <pre id="result"></pre>
+  <button id="copyBtn" onclick="copyJSON()">📋 Copy to Clipboard</button>
+  <script>
+      // Set today's date as the min for both date fields
+    window.onload = function () {
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("deliveryDate").setAttribute("min", today);
+      document.getElementById("dispatchDate").setAttribute("min", today);
+    };
+    function generateJSON() {
+      const deliveryDate = document.getElementById("deliveryDate").value;
+      const dispatchDate = document.getElementById("dispatchDate").value;
+      const carrierCode = document.getElementById("carrierCode").value;
+      const methodCode = document.getElementById("methodCode").value;
+      const result = {
+        shipments: [
+          {
+            carrierCode: carrierCode,
+            methodCode: methodCode,
+            deliveryDate: deliveryDate,
+            dispatchDate: dispatchDate
+          }
+        ]
+      };
+      document.getElementById("result").textContent = JSON.stringify(result, null, 2);
+    }
+    function copyJSON() {
+      const result = document.getElementById("result").textContent;
+      if (!result.trim()) {
+        alert("Please generate the JSON first.");
+        return;
+      }
+      navigator.clipboard.writeText(result).then(() => {
+        alert("JSON copied to clipboard!");
+      }).catch(err => {
+        alert("Failed to copy JSON: " + err);
+      });
+    }
+  </script>
+</body>
+</html>
