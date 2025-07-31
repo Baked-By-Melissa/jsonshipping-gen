@@ -24,6 +24,7 @@
       <option value="">-- Select --</option>
       <option value="shq-fedex-soon">Fedex</option>
 	  <option value="shq-cdl-weekdays">CDL</option>
+      <option value="shq-courier">Courier</option>
     </select>
   </label>
   <label>Method Code:
@@ -33,9 +34,29 @@
       <option value="FEDEX_2_DAY">FEDEX_2_DAY</option>
       <option value="STANDARD_OVERNIGHT">STANDARD_OVERNIGHT</option>
       <option value="PRIORITY_OVERNIGHT">PRIORITY_OVERNIGHT by 12pm</option>
-	  <option value="CDL_standard">CDL Standard</option>
+	  <option value="402">Fashion District</option>
+      <option value="403">Financial District</option>
+      <option value="405">Grand Central</option>
+      <option value="410">Union Square</option>
+      <option value="411">Upper East 61</option>
+      <option value="414">Upper East Side 86</option>
+      <option value="412">Upper West Side</option>
+      <option value="417">Hudson Yards</option>
+
     </select>
   </label>
+
+  <label>Delivery Time:
+    <select id="deliveryTime">
+      <option value="">-- Select --</option>
+      <option value="8:00 AM - 10:00 AM">9:00 AM - 11:00 AM</option>
+      <option value="12:00 AM - 1:00 PM">11:00 AM - 1:00 PM</option>
+      <option value="12:00 PM - 2:00 PM">1:00 PM - 3:00 PM</option>
+      <option value="2:00 PM - 4:00 PM">3:00 PM - 5:00 PM</option>
+      <option value="3:00 PM - 5:00 PM">5:00 PM - 7:00 PM</option>
+    </select>
+  </label>
+
   <button onclick="generateJSON()">Generate JSON</button>
   <h3>Resulting JSON:</h3>
   <pre id="result"></pre>
@@ -52,15 +73,21 @@
       const dispatchDate = document.getElementById("dispatchDate").value;
       const carrierCode = document.getElementById("carrierCode").value;
       const methodCode = document.getElementById("methodCode").value;
-      const result = {
-        shipments: [
-          {
+      const deliveryTime = document.getElementById("deliveryTime").value;
+
+      const shipment = {
             carrierCode: carrierCode,
             methodCode: methodCode,
             deliveryDate: deliveryDate,
             dispatchDate: dispatchDate
+      };
+
+      if (deliveryTime) {
+        shipment.deliveryTime = deliveryTime;
           }
-        ]
+
+      const result = {
+        shipments: [shipment]
       };
       document.getElementById("result").textContent = JSON.stringify(result);
     }
